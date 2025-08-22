@@ -6,7 +6,6 @@ import os
 import shutil
 import sys
 import ctypes
-from rich.progress import Progress
 from time import sleep
 logging.basicConfig(
     level="DEBUG", format="%(message)s", datefmt="[%X]", handlers=[RichHandler()]
@@ -141,23 +140,16 @@ def backup_hosts():
         r"C:/Windows/System32/drivers/etc/hosts.quipher.bak",
     )
 
-def block_task(file, progress, task, list):
+def block_task(file, list):
     for site in list:
         file.write(f"127.0.0.55\t{site}\n")
-        progress.update(task, refresh=True)
-    progress.update(task,completed=True, refresh=True)
 
 def block_sites(file: TextIOWrapper):
     logger = logging.getLogger("quipher")
-    with Progress() as progress:
-        ai_task = progress.add_task("[red] Blocking AI", total=len(AI_SITES))
-        socials_task = progress.add_task(
-            "[yellow] Blocking Social Medias", total=len(SOCIAL_MEDIAS)
-        )
-        block_task(file, progress, ai_task, AI_SITES)
-        logger.info("Successfully blocked AI")
-        block_task(file, progress, ai_task, SOCIAL_MEDIAS)        
-        logger.info("Successfully blocked social medias")
+    block_task(file,AI_SITES)
+    logger.info("Successfully blocked AI")
+    block_task(file, SOCIAL_MEDIAS)        
+    logger.info("Successfully blocked social medias")
 
 
 def unblock_sites():
