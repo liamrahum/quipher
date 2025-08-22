@@ -52,7 +52,6 @@ AI_SITES = [
     "deepstory.ai",
     "docsbot.ai",
     "dreamily.ai",
-    "duckduckgo.com",
     "elevenlabs.io",
     "flatai.org",
     "galaxy.ai",
