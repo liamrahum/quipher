@@ -174,6 +174,7 @@ def main():
     print_logo()
     if get_disable_quipher():
         unblock_sites()
+        logger.info("Successfully unblocked sites")
         input("Press Enter to quit")
         return
     backup_hosts()
