@@ -143,6 +143,7 @@ def backup_hosts():
 def block_task(file, list):
     for site in list:
         file.write(f"127.0.0.55\t{site}\n")
+        file.write(f"127.0.0.55\twww.{site}\n")
 
 def block_sites(file: TextIOWrapper):
     logger = logging.getLogger("quipher")
