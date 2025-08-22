@@ -7,7 +7,7 @@ import shutil
 import sys
 import ctypes
 from rich.progress import Progress
-
+from time import sleep
 logging.basicConfig(
     level="DEBUG", format="%(message)s", datefmt="[%X]", handlers=[RichHandler()]
 )
@@ -150,12 +150,18 @@ def block_sites(file: TextIOWrapper):
             "[yellow] Blocking Social Medias", total=len(SOCIAL_MEDIAS)
         )
         for site in AI_SITES:
-            file.write(f"127.0.0.55/t{site}")
-            progress.update(ai_task)
+            file.write(f"127.0.0.55\t{site}\n")
+            progress.update(ai_task, refresh=True)
+            sleep(0.02)
+        progress.update(ai_task,completed=True, refresh=True)
+
         logger.info("Successfully blocked AI")
         for site in SOCIAL_MEDIAS:
-            file.write(f"127.0.0.55/t{site}")
-            progress.update(socials_task)
+            file.write(f"127.0.0.55\t{site}\n")
+            progress.update(socials_task, refresh=True)
+            sleep(0.02)
+        progress.update(socials_task,completed=True, refresh=True)
+        
         logger.info("Successfully blocked social medias")
 
 
@@ -166,7 +172,7 @@ def unblock_sites():
     )
 
 def get_disable_quipher():
-    return os.path.exists(r'C:/Windows/System32/drivers/etc/hosts')
+    return os.path.exists(r'C:/Windows/System32/drivers/etc/hosts.quipher.bak')
 
 def print_logo():
     print('  ___          _         _                 ')
@@ -182,7 +188,10 @@ def main():
     if get_disable_quipher():
         unblock_sites()
         return
-    block_sites()
+    with open('C:/Windows/System32/drivers/etc/hosts', 'a+') as hosts:
+        block_sites(hosts)
+
+    input("Press Enter to Quit")
 
 if __name__ == "__main__":
     if is_admin():
