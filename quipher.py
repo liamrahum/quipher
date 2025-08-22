@@ -7,6 +7,7 @@ import shutil
 import sys
 import ctypes
 from time import sleep
+
 logging.basicConfig(
     level="DEBUG", format="%(message)s", datefmt="[%X]", handlers=[RichHandler()]
 )
@@ -139,16 +140,18 @@ def backup_hosts():
         r"C:/Windows/System32/drivers/etc/hosts.quipher.bak",
     )
 
+
 def block_task(file, list):
     for site in list:
         file.write(f"127.0.0.55\t{site}\n")
         file.write(f"127.0.0.55\twww.{site}\n")
 
+
 def block_sites(file: TextIOWrapper):
     logger = logging.getLogger("quipher")
-    block_task(file,AI_SITES)
+    block_task(file, AI_SITES)
     logger.info("Successfully blocked AI")
-    block_task(file, SOCIAL_MEDIAS)        
+    block_task(file, SOCIAL_MEDIAS)
     logger.info("Successfully blocked social medias")
 
 
@@ -158,16 +161,19 @@ def unblock_sites():
         r"C:/Windows/System32/drivers/etc/hosts",
     )
 
+
 def get_disable_quipher():
-    return os.path.exists(r'C:/Windows/System32/drivers/etc/hosts.quipher.bak')
+    return os.path.exists(r"C:/Windows/System32/drivers/etc/hosts.quipher.bak")
+
 
 def print_logo():
-    print('  ___          _         _                 ')
-    print(' / _ \  _   _ (_) _ __  | |__    ___  _ __ ')
+    print("  ___          _         _                 ")
+    print(" / _ \  _   _ (_) _ __  | |__    ___  _ __ ")
     print("| | | || | | || || '_ \ | '_ \  / _ \| '__|")
-    print('| |_| || |_| || || |_) || | | ||  __/| |   ')
-    print(' \__\_\ \__,_||_|| .__/ |_| |_| \___||_|   ')
-    print('                 |_|                       ')
+    print("| |_| || |_| || || |_) || | | ||  __/| |   ")
+    print(" \__\_\ \__,_||_|| .__/ |_| |_| \___||_|   ")
+    print("                 |_|                       ")
+
 
 def main():
     logger = logging.getLogger("quipher")
@@ -178,10 +184,11 @@ def main():
         input("Press Enter to quit")
         return
     backup_hosts()
-    with open('C:/Windows/System32/drivers/etc/hosts', 'a+') as hosts:
+    with open("C:/Windows/System32/drivers/etc/hosts", "a+") as hosts:
         block_sites(hosts)
 
     input("Press Enter to quit")
+
 
 if __name__ == "__main__":
     if is_admin():
