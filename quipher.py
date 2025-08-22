@@ -141,6 +141,11 @@ def backup_hosts():
         r"C:/Windows/System32/drivers/etc/hosts.quipher.bak",
     )
 
+def block_task(file, progress, task, list):
+    for site in list:
+        file.write(f"127.0.0.55\t{site}\n")
+        progress.update(task, refresh=True)
+    progress.update(task,completed=True, refresh=True)
 
 def block_sites(file: TextIOWrapper):
     logger = logging.getLogger("quipher")
@@ -149,19 +154,9 @@ def block_sites(file: TextIOWrapper):
         socials_task = progress.add_task(
             "[yellow] Blocking Social Medias", total=len(SOCIAL_MEDIAS)
         )
-        for site in AI_SITES:
-            file.write(f"127.0.0.55\t{site}\n")
-            progress.update(ai_task, refresh=True)
-            sleep(0.02)
-        progress.update(ai_task,completed=True, refresh=True)
-
+        block_task(file, progress, ai_task, AI_SITES)
         logger.info("Successfully blocked AI")
-        for site in SOCIAL_MEDIAS:
-            file.write(f"127.0.0.55\t{site}\n")
-            progress.update(socials_task, refresh=True)
-            sleep(0.02)
-        progress.update(socials_task,completed=True, refresh=True)
-        
+        block_task(file, progress, ai_task, SOCIAL_MEDIAS)        
         logger.info("Successfully blocked social medias")
 
 
@@ -187,11 +182,13 @@ def main():
     print_logo()
     if get_disable_quipher():
         unblock_sites()
+        input("Press Enter to quit")
         return
+    backup_hosts()
     with open('C:/Windows/System32/drivers/etc/hosts', 'a+') as hosts:
         block_sites(hosts)
 
-    input("Press Enter to Quit")
+    input("Press Enter to quit")
 
 if __name__ == "__main__":
     if is_admin():
