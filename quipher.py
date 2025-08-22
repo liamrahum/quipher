@@ -3,7 +3,6 @@ from io import TextIOWrapper
 import logging
 from rich.logging import RichHandler
 import os
-from art import tprint
 import shutil
 import sys
 import ctypes
@@ -138,8 +137,8 @@ def is_admin():
 
 def backup_hosts():
     shutil.copy(
-        r"C:\Windows\System32\drivers\etc\hosts",
-        r"C:\Windows\System32\drivers\etc\hosts.quipher.bak",
+        r"C:/Windows/System32/drivers/etc/hosts",
+        r"C:/Windows/System32/drivers/etc/hosts.quipher.bak",
     )
 
 
@@ -151,27 +150,35 @@ def block_sites(file: TextIOWrapper):
             "[yellow] Blocking Social Medias", total=len(SOCIAL_MEDIAS)
         )
         for site in AI_SITES:
-            file.write(f"127.0.0.55\t{site}")
+            file.write(f"127.0.0.55/t{site}")
             progress.update(ai_task)
         logger.info("Successfully blocked AI")
         for site in SOCIAL_MEDIAS:
-            file.write(f"127.0.0.55\t{site}")
+            file.write(f"127.0.0.55/t{site}")
             progress.update(socials_task)
         logger.info("Successfully blocked social medias")
 
 
 def unblock_sites():
     shutil.move(
-        r"C:\Windows\System32\drivers\etc\hosts.quipher.bak",
-        r"C:\Windows\System32\drivers\etc\hosts",
+        r"C:/Windows/System32/drivers/etc/hosts.quipher.bak",
+        r"C:/Windows/System32/drivers/etc/hosts",
     )
 
 def get_disable_quipher():
-    return os.path.exists(r'C:\Windows\System32\drivers\etc\hosts')
+    return os.path.exists(r'C:/Windows/System32/drivers/etc/hosts')
+
+def print_logo():
+    print('  ___          _         _                 ')
+    print(' / _ \  _   _ (_) _ __  | |__    ___  _ __ ')
+    print("| | | || | | || || '_ \ | '_ \  / _ \| '__|")
+    print('| |_| || |_| || || |_) || | | ||  __/| |   ')
+    print(' \__\_\ \__,_||_|| .__/ |_| |_| \___||_|   ')
+    print('                 |_|                       ')
 
 def main():
     logger = logging.getLogger("quipher")
-    tprint("Quipher")
+    print_logo()
     if get_disable_quipher():
         unblock_sites()
         return
